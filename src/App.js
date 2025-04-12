@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import WebexEmbeddedApp from '@webex/embedded-app-sdk';
 
 const STORAGE_KEY = "offline-submissions";
 
@@ -7,13 +8,13 @@ function App() {
   const [status, setStatus] = useState("Initializing...");
 
   useEffect(() => {
-    if (window.WebexEmbeddedApp) {
-      window.WebexEmbeddedApp.onReady().then(() => {
+    if (WebexEmbeddedApp) {
+      WebexEmbeddedApp.onReady().then(() => {
         setStatus("✅ Webex Ready");
         tryToResend();
       });
     } else {
-      console.warn("⚠ WebexEmbeddedApp is not available. You're probably running locally outside Webex.");
+      console.warn("⚠ WebexEmbeddedApp SDK not available.");
       setStatus("Running outside Webex – SDK not available.");
     }
   
@@ -34,6 +35,18 @@ function App() {
 
   const sendToBackend = async (text) => {
     // Replace with your real backend/API call
+    // try {
+    //   await fetch("https://dhwanika.app.n8n.cloud/webhook/chatgpt-webhook/test", {
+    //     method: 'POST',
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       body: JSON.stringify({message: text, timestamp: new Date().toISOString()})
+    //     }
+    //   })
+    //   console.log(' input sent to webhook')
+    // } catch(err) {
+
+    // }
     console.log("Sending to server:", text);
     return new Promise((res) => setTimeout(res, 1000));
   };
@@ -54,7 +67,7 @@ function App() {
 
     setInput("");
   };
-
+  const submissions = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   return (
     <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h2>Workmate Assistant</h2>
@@ -68,6 +81,9 @@ function App() {
           onChange={(e) => setInput(e.target.value)}
         />
         <button onClick={handleSubmit}>Submit</button>
+      </div>
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        {submissions?.map(submission => <span>{submission}</span>)}
       </div>
     </div>
   );

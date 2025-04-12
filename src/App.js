@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import WebexEmbeddedApp from '@webex/embedded-app-sdk';
+import {WebexEmbeddedApp} from '@webex/embedded-app-sdk';
 
 const STORAGE_KEY = "offline-submissions";
 
@@ -35,18 +35,18 @@ function App() {
 
   const sendToBackend = async (text) => {
     // Replace with your real backend/API call
-    // try {
-    //   await fetch("https://dhwanika.app.n8n.cloud/webhook/chatgpt-webhook/test", {
-    //     method: 'POST',
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       body: JSON.stringify({message: text, timestamp: new Date().toISOString()})
-    //     }
-    //   })
-    //   console.log(' input sent to webhook')
-    // } catch(err) {
+    try {
+      await fetch("https://dhwanika.app.n8n.cloud/webhook-test/chatgpt-webhook/test", {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          body: JSON.stringify({text})
+        }
+      })
+      console.log(' input sent to webhook')
+    } catch(err) {
 
-    // }
+    }
     console.log("Sending to server:", text);
     return new Promise((res) => setTimeout(res, 1000));
   };
